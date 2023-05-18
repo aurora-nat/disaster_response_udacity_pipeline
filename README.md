@@ -21,11 +21,6 @@ The purpose of this project was to analyze disaster data from Appen and build a 
 - README.md
 - requirements.txt
 
-##  Udacity Disaster Response Pipeline
-
-The purpose of this project was to analyze disaster data from Appen and build a machine learning model API that classifies disaster messages. The model creates a Natural Language Processor Pipeline which is used to classify the disaster within a set of 36 classes (a mutlioutputClassifier). The project is designed using bootstrap and allows an emergency worker to type in the incoming emergency message to understand the type of emergency we are dealing with. This type of application can positively impact various emergency teams to reduce time spent categorizing disasters. This would increase efficiency in being able to send appropriate resources to the disaster locations.
-
-
 ## Project Files
 
 - app: 
