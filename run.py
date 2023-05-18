@@ -1,18 +1,68 @@
 import re
 import json
 import plotly
+import nltk
 import pandas as pd
+import numpy as np
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
-
+from sklearn.base import BaseEstimator, TransformerMixin
 from flask import Flask
-from flask import render_template, request, jsonify
+from flask import render_template, request
 import joblib
 from sqlalchemy import create_engine
 from plotly.graph_objects import Bar
 
+
+
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
+
+
+class StartingVerbExtractor(BaseEstimator, TransformerMixin):
+    """
+    Original author: Udacity
+    Transformer utilized to extract the verb from the sentence. This helps
+    increase the meaning behind the context of the message being utilized. 
+    """
+    def starting_verb(self, text):
+        #tokenize per sentence
+        sentence_list = nltk.sent_tokenize(text)
+
+        for sentence in sentence_list:
+            #add a part of speech tag to our tokenized sentence
+            pos_tags = nltk.pos_tag(tokenize(sentence))
+            
+            if len(pos_tags) > 1:
+                #grab first word/tag
+                first_word, first_tag = pos_tags[0]
+                #if first tag is appropriate verb
+                if first_tag in ['VB', 'VBP']:
+                    return 1
+                else:
+                    return 0
+            else:
+                return 0
+
+    def fit(self, x, y=None):
+        return self
+
+    def transform(self, X):
+        '''
+            The transform method will apply the starting verb to all values in X
+            and transform the series into a dataframe to be utilized later, the dataframe
+            ensures no nan values are found
+
+            Parameters: 
+                X: The series message we are looking at that we will transform
+            Returns: 
+                X_taged: The new dataframe that has been tagged
+        '''
+        X_tagged = pd.Series(X).apply(self.starting_verb)
+        X_tagged = pd.DataFrame(X_tagged)
+        #RandomForestClassifier cannot accept missing values, so we must ensure they are droppped
+        X_tagged = X_tagged.replace(np.nan, 0)
+        return X_tagged
 
 def tokenize(text):
     """
@@ -48,7 +98,7 @@ df = pd.read_sql_table('categories', engine)
 
 # load model
 # load model
-model = joblib.load("../models/your_model_name.pkl")
+model = joblib.load("models/classifier.pkl")
 
 
 # index webpage displays cool visuals and receives user input text for model
