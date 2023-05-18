@@ -27,7 +27,7 @@ The purpose of this project was to analyze disaster data from Appen and build a 
     - templates:
         - go.html: classification result page of web app
         - master.html: main page of web app
-    - run.py: Flask file that runs app
+
 - data:
     - disaster_categories.csv: data that will be processsed  
     - disaster_messages.csv: data to process
@@ -38,6 +38,8 @@ The purpose of this project was to analyze disaster data from Appen and build a 
     - classifier.pky: saved model
 - README.md
 - requirements.txt
+- run.py: Flask file that runs app
+
 
 ### Instructions to run code locally:
 1. Run the following commands in the project's root directory to set up your database and model.
